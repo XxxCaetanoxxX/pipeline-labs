@@ -1,0 +1,29 @@
+name: Comandos github actions
+on:
+  push:
+    branches:
+        - main
+        - develop
+    paths:
+        - 'src/**'
+        - 'README.md'
+
+jobs:
+  push_job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Exibir informações do push
+        run: |
+          echo "workflow disparado por push"
+          echo "Commit: ${{github.sha}}"
+          echo "Autor: ${{github.actor}}"
+          echo "Branch: ${{github.ref_name}}"
+          echo "Repositório: ${{github.repository}}"
+
+      - name: Listar arquivos modificados
+        run: |
+          echo "Arquivos no repositório:"
+          ls -la
