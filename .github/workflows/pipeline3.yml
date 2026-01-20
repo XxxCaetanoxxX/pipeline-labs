@@ -5,8 +5,8 @@ on:
         - main
         - develop
     paths:
-        - 'src/**'
-        - 'README.md'
+        - 'src/**' # todos os arquivos da pasta src
+        - 'README.md' #apenas o arquivo README.md
 
 jobs:
   push_job:
