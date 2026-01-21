@@ -1,0 +1,77 @@
+name: Deploy multi-ambientes
+
+on:
+    workflow_dispatch:
+
+jobs:
+    #mostrar as variaveis de repositorio compartilhadas
+    mostrar-variaveis-repositorio:
+        runs-on: ubuntu-latest
+        steps:
+            - name: Exibir variáveis do repositório
+              run: |
+                  echo "=== VARIAVEIS DE REPOSITÓRIO ==="
+                  echo "NOME DO REPOSITÓRIO: ${{ vars.APP_NAME }}"
+                  echo "região: ${{ vars.DEFAULT_REGION }}"
+                  echo "Timeout padrão: ${{ vars.DEFAULT_TIMEOUT }} segundos"
+                  echo "versao do node: ${{ vars.NODE_VERSION }}"
+
+    deploy-dev:
+        runs-on: ubuntu-latest
+        environment: dev
+        steps:
+            - name: configurar ambiente dev
+              run: |
+                  echo "Iniciando deploy no ambiente de desenvolvimento..."
+                  echo "Aplicação: ${{ vars.APP_NAME }}"
+                  echo "Ambiente: ${{ vars.ENVIRONMENT }}"
+                  echo "API URL: ${{ vars.API_URL }}"
+                  echo "database: ${{ vars.DATABASE_NAME }}"
+                  echo "Região: ${{ vars.DEFAULT_REGION }}"
+                  echo "Debug Mode: ${{ vars.DEBUG_MODE }}"
+                  echo "Versão do Node.js: ${{ vars.NODE_VERSION }}"
+                  echo "max connections: ${{vars.MAX_CONNECTIONS}}"
+                  echo "Deploy no ambiente de desenvolvimento concluído."
+
+    deploy-staging:
+        runs-on: ubuntu-latest
+        environment: staging
+        needs: deploy-dev
+        steps:
+            - name: configurar ambiente staging
+              run: |
+                  echo "Iniciando deploy no ambiente de staging..."
+                  echo "Aplicação: ${{ vars.APP_NAME }}"
+                  echo "Ambiente: ${{ vars.ENVIRONMENT }}"
+                  echo "API URL: ${{ vars.API_URL }}"
+                  echo "database: ${{ vars.DATABASE_NAME }}"
+                  echo "Região: ${{ vars.DEFAULT_REGION }}"
+                  echo "Debug Mode: ${{ vars.DEBUG_MODE }}"
+                  echo "Versão do Node.js: ${{ vars.NODE_VERSION }}"
+                  echo "max connections: ${{vars.MAX_CONNECTIONS}}"
+                  echo "Deploy no ambiente de staging concluído."
+
+            - name: simular testes de integracao
+              run: |
+                echo "executando testes em ${{vars.ENVIRONMENT}}..."
+                echo "endpoint ${{vars.API_URL}}"
+                sleep 2
+                echo "testes aprovados em staging"
+
+    deploy-prod:
+        runs-on: ubuntu-latest
+        environment: production
+        needs: deploy-staging
+        steps:
+            - name: configurar ambiente prod
+              run: |
+                  echo "Iniciando deploy no ambiente de produção..."
+                  echo "Aplicação: ${{ vars.APP_NAME }}"
+                  echo "Ambiente: ${{ vars.ENVIRONMENT }}"
+                  echo "API URL: ${{ vars.API_URL }}"
+                  echo "database: ${{ vars.DATABASE_NAME }}"
+                  echo "Região: ${{ vars.DEFAULT_REGION }}"
+                  echo "Debug Mode: ${{ vars.DEBUG_MODE }}"
+                  echo "Versão do Node.js: ${{ vars.NODE_VERSION }}"
+                  echo "max connections: ${{vars.MAX_CONNECTIONS}}"
+                  echo "Deploy no ambiente de produção concluído."
